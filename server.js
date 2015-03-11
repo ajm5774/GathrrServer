@@ -16,25 +16,30 @@ app.use(bodyParser.json());
 
 
 var mongoose   = require('mongoose');
-mongoose.connect('mongodb://fightr-user:fightr-password@ds031631.mongolab.com/gathrr'); // connect to our database
-var User     = require('./app/models/user');
-
+var options = {
+  server: { poolSize: 5 },
+  user: 'gathrr',
+  pass: 'actually 4 fighting'
+}
+mongoose.connect('mongodb://ds031631.mongolab.com:31631/gathrr', options, 
+function(){
+	console.log('Connected to DB');
+}); // connect to our database
+var UserModel     = require('./app/models/user');
 // ROUTES FOR OUR API
 // =============================================================================
 
 // create our router
 var router = express.Router();
 
-/*// middleware to use for all requests
+// middleware to use for all requests
 router.use(function(req, res, next) {
 	// do logging
-	console.log('Something is happening.');
+	console.log("Something happened");
 	next();
-});*/
+});
 
 router.route('/addUser')
-
-	// create a bear (accessed at POST http://localhost:8080/bears)
 	.post(function(req, res) {
 
 		var user = new User();
@@ -58,7 +63,7 @@ router.route('/users/:user_id')
 
 	// get the user with that id
 	.get(function(req, res) {
-		User.findOne({id: req.params.user_id}, function(err, user) {
+		UserModel.findOne({id: req.params.user_id}, function(err, user) {
 			if (err)
 				res.send(err);
 			res.json(user);
@@ -67,7 +72,7 @@ router.route('/users/:user_id')
 
 	// update the User with this id
 	.put(function(req, res) {
-		User.findOne({id: req.params.user_id}, function(err, user) {
+		UserModel.findOne({id: req.params.user_id}, function(err, user) {
 
 			if (err)
 				res.send(err);
@@ -88,22 +93,20 @@ router.route('/users/:user_id')
 		});
 	})
 
-	// delete the bear with this id
+	// delete the user with this id
 	.delete(function(req, res) {
-		User.remove({id: req.params.user_id}, function(err, user) {
+		UserModel.remove({id: req.params.user_id}, function(err, user) {
 			if (err)
 				res.send(err);
 
 			res.json({ message: 'Successfully deleted' });
 		});
-	})
-);
+	});
 
 router.route('/addSeen')
 
-	// create a bear (accessed at POST http://localhost:8080/bears)
 	.post(function(req, res) {
-		User.findOne({id: req.body.id}, function(err, user) {
+		UserModel.findOne({id: req.body.id}, function(err, user) {
 
 			user.fighters_seen.put(req.body.idSeen);
 
@@ -119,13 +122,27 @@ router.route('/addSeen')
 	});
 
 router.get('/getNextFighter/:user_id', function(req, res) {
-	User.findOne({id: req.params.user_id}, function(err, user) {
-		User.findOne({id: { $nin: user.fighters_seen}}, function(err, nFighter) {
+	UserModel.findOne({id: req.params.user_id}, function(err, user) {
+		UserModel.findOne({id: { $nin: user.fighters_seen}}, function(err, nFighter) {
 			if (err)
 				res.send(err);
 			res.json(nFighter);
 		});
 	});
+});
+
+router.get('/getAllFighters', function(req, res) {
+	console.log("gets to the function");
+	UserModel.find(function(err, users) {
+		console.log("Query Returns");
+		if (err)
+			res.send(err);
+		res.json(users);
+	});
+});
+
+router.get('/test', function(req, res) {
+	res.json("Hello World");
 });
 
 

@@ -1,14 +1,14 @@
 var mongoose     = require('mongoose');
 var Schema       = mongoose.Schema;
 
-var BearSchema   = new Schema({
+var UserSchema   = new Schema({
 	id: String,
 	name: String,
-	weight: double,
+	weight: Number,
 	sex: String,
 	picture: String,
-	history: [],
-	fighters_seen: [String]
+	history: [Schema.Types.Mixed],
+	fighters_seen: Schema.Types.Mixed
 });
 
-module.exports = mongoose.model('Bear', BearSchema);
+module.exports = mongoose.model('User', UserSchema);
