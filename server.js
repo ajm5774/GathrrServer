@@ -16,16 +16,14 @@ app.use(bodyParser.json());
 
 
 var mongoose   = require('mongoose');
-var options = {
-  server: { poolSize: 5 },
-  user: 'gathrr',
-  pass: 'actually 4 fighting'
-}
-mongoose.connect('mongodb://ds031631.mongolab.com:31631/gathrr', options, 
+var seed     = require('./seed');
+mongoose.connect('mongodb://gathrr:gathrrPass!1@ds031631.mongolab.com:31631/gathrr',
 function(){
-	console.log('Connected to DB');
+	seed.seedUsers();
 }); // connect to our database
 var UserModel     = require('./app/models/user');
+
+
 // ROUTES FOR OUR API
 // =============================================================================
 
@@ -134,6 +132,7 @@ router.get('/getNextFighter/:user_id', function(req, res) {
 router.get('/getAllFighters', function(req, res) {
 	console.log("gets to the function");
 	UserModel.find(function(err, users) {
+		//never gets here!!
 		console.log("Query Returns");
 		if (err)
 			res.send(err);
