@@ -57,11 +57,11 @@ router.route('/addUser')
 		});
 	});
 
-router.route('/users/:user_id')
+router.route('/users/:id')
 
 	// get the user with that id
 	.get(function(req, res) {
-		UserModel.findOne({id: req.params.user_id}, function(err, user) {
+		UserModel.findOne({id: req.params.id}, function(err, user) {
 			if (err)
 				res.send(err);
 			res.json(user);
@@ -70,7 +70,7 @@ router.route('/users/:user_id')
 
 	// update the User with this id
 	.put(function(req, res) {
-		UserModel.findOne({id: req.params.user_id}, function(err, user) {
+		UserModel.findOne({id: req.params.id}, function(err, user) {
 
 			if (err)
 				res.send(err);
@@ -93,7 +93,7 @@ router.route('/users/:user_id')
 
 	// delete the user with this id
 	.delete(function(req, res) {
-		UserModel.remove({id: req.params.user_id}, function(err, user) {
+		UserModel.remove({id: req.params.id}, function(err, user) {
 			if (err)
 				res.send(err);
 
@@ -119,8 +119,8 @@ router.route('/addSeen')
 		
 	});
 
-router.get('/getNextFighter/:user_id', function(req, res) {
-	UserModel.findOne({id: req.params.user_id}, function(err, user) {
+router.get('/getNextFighter/:id', function(req, res) {
+	UserModel.findOne({id: req.params.id}, function(err, user) {
 		UserModel.findOne({id: { $nin: user.fighters_seen}}, function(err, nFighter) {
 			if (err)
 				res.send(err);
