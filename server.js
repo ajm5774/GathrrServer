@@ -121,11 +121,11 @@ router.route('/addSeen')
 	});
 
 router.get('/getNextFighter', function(req, res) {
-	console.log(req.query.id);
+	console.log("Userid: "req.query.id);
 	UserModel.findOne({id: req.query.id}, function(err, user) {
 		if(user == null)
 			res.json("");
-		
+
 		UserModel.findOne({id: { $nin: user.fighters_seen}}, function(err, nFighter) {
 			if (err)
 				res.send(err);  
