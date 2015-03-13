@@ -124,7 +124,10 @@ router.get('/getNextFighter', function(req, res) {
 	console.log("**********id: " + req.query.id);
 	UserModel.findOne({id: req.query.id}, function(err, user) {
 		if(user == undefined)
+		{
 			res.json("");
+			return;
+		}
 
 		UserModel.findOne({id: { $nin: user.fighters_seen}}, function(err, nFighter) {
 			if (err)
