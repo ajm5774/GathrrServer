@@ -34,6 +34,7 @@ var router = express.Router();
 router.use(function(req, res, next) {
 	// do logging
 	console.log("Something happened");
+	console.log(req.params);
 	next();
 });
 
@@ -57,11 +58,11 @@ router.route('/addUser')
 		});
 	});
 
-router.route('/users/:id')
+router.route('/user')
 
 	// get the user with that id
 	.get(function(req, res) {
-		UserModel.findOne({id: req.params.id}, function(err, user) {
+		UserModel.findOne({id: req.query.id}, function(err, user) {
 			if (err)
 				res.send(err);
 			res.json(user);
@@ -70,7 +71,7 @@ router.route('/users/:id')
 
 	// update the User with this id
 	.put(function(req, res) {
-		UserModel.findOne({id: req.params.id}, function(err, user) {
+		UserModel.findOne({id: req.query.id}, function(err, user) {
 
 			if (err)
 				res.send(err);
@@ -93,7 +94,7 @@ router.route('/users/:id')
 
 	// delete the user with this id
 	.delete(function(req, res) {
-		UserModel.remove({id: req.params.id}, function(err, user) {
+		UserModel.remove({id: req.query.id}, function(err, user) {
 			if (err)
 				res.send(err);
 
@@ -119,8 +120,8 @@ router.route('/addSeen')
 		
 	});
 
-router.get('/getNextFighter/:id', function(req, res) {
-	UserModel.findOne({id: req.params.id}, function(err, user) {
+router.get('/getNextFighter', function(req, res) {
+	UserModel.findOne({id: req.query.id}, function(err, user) {
 		UserModel.findOne({id: { $nin: user.fighters_seen}}, function(err, nFighter) {
 			if (err)
 				res.send(err);
