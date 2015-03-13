@@ -128,7 +128,7 @@ router.get('/getNextFighter', function(req, res) {
 			res.json(nFighter);
 		});
 	});
-});
+}); 
 
 router.get('/getAllFighters', function(req, res) {
 	console.log("gets to the function");
