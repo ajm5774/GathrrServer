@@ -121,7 +121,7 @@ router.route('/addSeen')
 	});
 
 router.get('/getNextFighter', function(req, res) {
-	console.log("Userid: "req.query.id);
+	console.log("**********id: " + req.query.id);
 	UserModel.findOne({id: req.query.id}, function(err, user) {
 		if(user == null)
 			res.json("");
