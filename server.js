@@ -105,6 +105,9 @@ router.route('/user')
 router.route('/addSeen')
 
 	.post(function(req, res) {
+		console.log("****************");
+		console.log("body: " + req.body.id);
+		console.log("query: " + req.query.id);
 		UserModel.findOne({id: req.body.id}, function(err, user) {
 
 			user.fighters_seen.put(req.body.idSeen);
