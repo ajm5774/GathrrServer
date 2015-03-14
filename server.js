@@ -107,10 +107,10 @@ router.route('/addSeen')
 	.post(function(req, res) {
 		console.log("****************");
 		console.log("body: " + req.body.id);
-		console.log("query: " + req.query.id);
+		console.log("idseen: " + req.body.idSeen);
 		UserModel.findOne({id: req.body.id}, function(err, user) {
 
-			user.fighters_seen.push(req.body.id);
+			user.fighters_seen.push(req.body.idSeen);
 
 			user.save(function(err) {
 				if (err)
