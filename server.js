@@ -110,7 +110,7 @@ router.route('/addSeen')
 		console.log("query: " + req.query.id);
 		UserModel.findOne({id: req.body.id}, function(err, user) {
 
-			user.fighters_seen.put(req.body.idSeen);
+			user.fighters_seen.push(req.body.idSeen);
 
 			user.save(function(err) {
 				if (err)
