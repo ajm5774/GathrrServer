@@ -5,7 +5,8 @@ var User = require('./app/models/user');
 exports.seedUsers = function seedUsers() {
     User.find({}).exec(function (err, collection) {
         if (collection.length === 0) {
-            var testImages = ["miketyson.jpeg", "Ryu_SF.jpg"];
+            var testImages = ["https://placekitten.com/g/200/300", 
+            "http://nattyornot.com/wp-content/uploads/2014/11/mike-tyson-huge-muscles-bodybuilding.jpg"];
 			var genders = ["male", "female", "male"];
 			var numUsers = 30;
 
