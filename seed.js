@@ -17,7 +17,7 @@ exports.seedUsers = function seedUsers() {
 				user.name = "user" + i;
 				user.gender = genders[i%genders.length];
 				user.weight = (Math.random()*150.0 + 120);
-				user.picture = "src/androidTest/testImages/" + testImages[i%testImages.length];
+				user.picture = testImages[i%testImages.length];
 				user.history = [];
 				user.fighters_seen = [];
 				user.save(function(err) {
