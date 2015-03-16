@@ -47,6 +47,7 @@ router.route('/addUser')
 		user.weight = req.body.weight;  
 		user.sex = req.body.sex;  
 		user.picture = req.body.picture;  
+		user.weight_class = null;
 		user.history = [];  
 		user.fighters_seen = [];  
 
