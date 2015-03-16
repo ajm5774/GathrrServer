@@ -8,6 +8,7 @@ var UserSchema   = new Schema({
 	weight: Number,
 	sex: String,
 	picture: String,
+	weight_class: String,
 	history: [Schema.Types.Mixed],
 	fighters_seen: [String]
 });
