@@ -122,6 +122,26 @@ router.route('/addSeen')
 		});
 		
 	});
+	
+router.route('/resetSeen')
+
+	.post(function(req, res) {
+		console.log("****************");
+		console.log("id: " + req.body.id);
+		UserModel.findOne({id: req.body.id}, function(err, user) {
+
+			user.fighters_seen = [];
+
+			user.save(function(err) {
+				if (err)
+					res.send(err);
+
+				res.json({ message: 'Fighters Seen reset!' });
+			});
+
+		});
+		
+	});
 
 router.get('/getNextFighter', function(req, res) {
 	console.log("**********id: " + req.query.id);
