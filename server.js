@@ -152,7 +152,7 @@ router.get('/getNextFighter', function(req, res) {
 			return;
 		}
 
-		UserModel.findOne({id: { $nin: user.fighters_seen}}, function(err, nFighter) {
+		UserModel.findOne({id: { $nin: user.fighters_seen},sex: user.sex}}, function(err, nFighter) {
 			if (err)
 				res.send(err);  
 			res.json(nFighter);
