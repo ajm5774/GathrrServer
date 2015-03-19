@@ -1,6 +1,8 @@
 var mongoose     = require('mongoose');
 var Schema       = mongoose.Schema;
 
+var exports = module.exports = {};
+
 var UserSchema   = new Schema({
 	id: String,
 	name: String,
@@ -13,7 +15,9 @@ var UserSchema   = new Schema({
 	fighters_seen: [String]
 });
 
-UserModel.prototype.getWeightClass = function(weight)
+module.exports = mongoose.model('User', UserSchema);
+
+module.exports.getWeightClass = function(weight)
 {
 	if(weight <= 125)
 		return "Flyweight";
@@ -34,5 +38,3 @@ UserModel.prototype.getWeightClass = function(weight)
 	else
 		return "Super Heavyweight"
 }
-
-module.exports = mongoose.model('User', UserSchema);

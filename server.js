@@ -22,7 +22,6 @@ function(){
 	seed.seedUsers();
 }); // connect to our database
 var User     = require('./app/models/user');
-var UserModel = new (require('./models').UserModel);
 
 
 // ROUTES FOR OUR API
@@ -48,7 +47,7 @@ router.route('/addUser')
 		user.weight = req.body.weight;  
 		user.sex = req.body.sex;  
 		user.picture = req.body.picture;  
-		user.weight_class = getWeightClass(user.weight);
+		user.weight_class = User.getWeightClass(user.weight);
 		user.history = [];  
 		user.fighters_seen = [];  
 
