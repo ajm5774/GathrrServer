@@ -13,4 +13,26 @@ var UserSchema   = new Schema({
 	fighters_seen: [String]
 });
 
+UserModel.prototype.getWeightClass = function(weight)
+{
+	if(weight <= 125)
+		return "Flyweight";
+	else if(weight <= 135)
+		return "Bantamweight";
+	else if(weight <= 145)
+		return "Featherweight";
+	else if(weight <= 155)
+		return "Lightweight";
+	else if(weight <= 170)
+		return "Welterweight";
+	else if(weight <= 185)
+		return "Middleweight";
+	else if(weight <= 205)
+		return "Light Heavyweight";
+	else if(weight <= 265)
+		return "Heavyweight";
+	else
+		return "Super Heavyweight"
+}
+
 module.exports = mongoose.model('User', UserSchema);

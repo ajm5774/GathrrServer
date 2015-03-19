@@ -20,6 +20,7 @@ exports.seedUsers = function seedUsers() {
 				user.picture = testImages[i%testImages.length];
 				user.history = [];
 				user.fighters_seen = [];
+				user.weight_class = getWeightClass(user.weight);
 				user.save(function(err) {
 					if (err)
 						return console.log(err);

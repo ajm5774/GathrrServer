@@ -21,7 +21,8 @@ mongoose.connect('mongodb://gathrr:gathrrPass!1@ds031631.mongolab.com:31631/gath
 function(){
 	seed.seedUsers();
 }); // connect to our database
-var UserModel     = require('./app/models/user');
+var User     = require('./app/models/user');
+var UserModel = new (require('./models').UserModel);
 
 
 // ROUTES FOR OUR API
@@ -47,7 +48,7 @@ router.route('/addUser')
 		user.weight = req.body.weight;  
 		user.sex = req.body.sex;  
 		user.picture = req.body.picture;  
-		user.weight_class = null;
+		user.weight_class = getWeightClass(user.weight);
 		user.history = [];  
 		user.fighters_seen = [];  
 
@@ -63,7 +64,7 @@ router.route('/user')
 
 	// get the user with that id
 	.get(function(req, res) {
-		UserModel.findOne({id: req.query.id}, function(err, user) {
+		User.findOne({id: req.query.id}, function(err, user) {
 			if (err)
 				res.send(err);
 			res.json(user);
@@ -72,7 +73,7 @@ router.route('/user')
 
 	// update the User with this id
 	.put(function(req, res) {
-		UserModel.findOne({id: req.query.id}, function(err, user) {
+		User.findOne({id: req.query.id}, function(err, user) {
 
 			if (err)
 				res.send(err);
@@ -95,7 +96,7 @@ router.route('/user')
 
 	// delete the user with this id
 	.delete(function(req, res) {
-		UserModel.remove({id: req.query.id}, function(err, user) {
+		User.remove({id: req.query.id}, function(err, user) {
 			if (err)
 				res.send(err);
 
@@ -109,7 +110,7 @@ router.route('/addSeen')
 		console.log("****************");
 		console.log("body: " + req.body.id);
 		console.log("idseen: " + req.body.idSeen);
-		UserModel.findOne({id: req.body.id}, function(err, user) {
+		User.findOne({id: req.body.id}, function(err, user) {
 
 			user.fighters_seen.push(req.body.idSeen);
 
@@ -129,7 +130,7 @@ router.route('/resetSeen')
 	.post(function(req, res) {
 		console.log("****************");
 		console.log("id: " + req.body.id);
-		UserModel.findOne({id: req.body.id}, function(err, user) {
+		User.findOne({id: req.body.id}, function(err, user) {
 
 			user.fighters_seen = [];
 
@@ -146,14 +147,15 @@ router.route('/resetSeen')
 
 router.get('/getNextFighter', function(req, res) {
 	console.log("**********id: " + req.query.id);
-	UserModel.findOne({id: req.query.id}, function(err, user) {
+	User.findOne({id: req.query.id}, function(err, user) {
 		if(user == undefined)
 		{
 			res.json("");
 			return;
 		}
 
-		UserModel.findOne({id: { $nin: user.fighters_seen},sex: user.sex}}, function(err, nFighter) {
+		User.findOne({id: { $nin: user.fighters_seen},
+		gender: user.gender, weight_class: user.weight_class}, function(err, nFighter) {
 			if (err)
 				res.send(err);  
 			res.json(nFighter);
@@ -163,7 +165,7 @@ router.get('/getNextFighter', function(req, res) {
 
 router.get('/getAllFighters', function(req, res) {
 	console.log("gets to the function");
-	UserModel.find(function(err, users) {
+	User.find(function(err, users) {
 		//never gets here!!
 		console.log("Query Returns");
 		if (err)
