@@ -159,6 +159,23 @@ router.get('/getNextFighter', function(req, res) {
 	});
 }); 
 
+router.get('/getNotSeenFighters', function(req, res) {
+	User.findOne({id: req.query.id}, function(err, user) {
+		if(user == undefined)
+		{
+			res.json("");
+			return;
+		}
+
+		User.find({id:  {$ne: user.id, $nin: user.fighters_seen},
+		gender: user.gender, weight_class: user.weight_class}, function(err, nFighters) {
+			if (err)
+				res.send(err);  
+			res.json(nFighters);
+		});
+	});
+}); 
+
 router.get('/getAllFighters', function(req, res) {
 	console.log("gets to the function");
 	User.find(function(err, users) {
