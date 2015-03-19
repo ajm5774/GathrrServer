@@ -7,8 +7,8 @@ exports.seedUsers = function seedUsers() {
         if (collection.length === 0) {
             var testImages = ["https://placekitten.com/g/200/300", 
             "http://nattyornot.com/wp-content/uploads/2014/11/mike-tyson-huge-muscles-bodybuilding.jpg"];
-			var genders = ["male", "female", "male"];
-			var numUsers = 30;
+			var genders = ["male", "male", "female"];
+			var numUsers = 50;
 
 			for(var i = 0; i < numUsers; i++)
 			{

@@ -127,8 +127,6 @@ router.route('/addSeen')
 router.route('/resetSeen')
 
 	.post(function(req, res) {
-		console.log("****************");
-		console.log("id: " + req.body.id);
 		User.findOne({id: req.body.id}, function(err, user) {
 
 			user.fighters_seen = [];
@@ -145,7 +143,6 @@ router.route('/resetSeen')
 	});
 
 router.get('/getNextFighter', function(req, res) {
-	console.log("**********id: " + req.query.id);
 	User.findOne({id: req.query.id}, function(err, user) {
 		if(user == undefined)
 		{
@@ -153,7 +150,7 @@ router.get('/getNextFighter', function(req, res) {
 			return;
 		}
 
-		User.findOne({id: { $nin: user.fighters_seen},
+		User.findOne({id:  {$ne: user.id, $nin: user.fighters_seen},
 		gender: user.gender, weight_class: user.weight_class}, function(err, nFighter) {
 			if (err)
 				res.send(err);  
