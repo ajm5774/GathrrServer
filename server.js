@@ -151,13 +151,14 @@ router.get('/getNextFighter', function(req, res) {
 		}
 
 		User.findOne({id:  {$ne: user.id, $nin: user.fighters_seen},
-		gender: user.gender, weight_class: user.weight_class}, function(err, nFighter) {
+		gender: {$in: user.matched_genders}, 'matched_genders.$':user.gender , weight_class: user.weight_class}, function(err, nFighter) {
 			if (err)
 				res.send(err);  
 			res.json(nFighter);
 		});
 	});
 }); 
+
 
 router.get('/getNotSeenFighters', function(req, res) {
 	User.findOne({id: req.query.id}, function(err, user) {

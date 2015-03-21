@@ -8,6 +8,7 @@ exports.seedUsers = function seedUsers() {
             var testImages = ["https://placekitten.com/g/200/300", 
             "http://nattyornot.com/wp-content/uploads/2014/11/mike-tyson-huge-muscles-bodybuilding.jpg"];
 			var genders = ["male", "male", "female"];
+			var matchedGenders = [["male"], ["male", "female"], ["female"]];
 			var numUsers = 50;
 
 			for(var i = 0; i < numUsers; i++)
@@ -15,6 +16,7 @@ exports.seedUsers = function seedUsers() {
 				var user = new User();
 				user.id = "user" + i;
 				user.name = "user" + i;
+				user.matched_genders = matchedGenders[i%genders.length];
 				user.gender = genders[i%genders.length];
 				user.weight = (Math.random()*150.0 + 120);
 				user.picture = testImages[i%testImages.length];
