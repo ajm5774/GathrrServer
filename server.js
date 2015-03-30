@@ -19,7 +19,7 @@ var mongoose   = require('mongoose');
 var seed     = require('./seed');
 mongoose.connect('mongodb://gathrr:gathrrPass!1@ds041188.mongolab.com:41188/gathrr',
 function(){
-	seed.seedUsers();
+	seed.seedUsers(false);
 }); // connect to our database
 var User     = require('./app/models/user');
 
@@ -143,7 +143,7 @@ router.route('/resetSeen')
 	});
 
 router.get('/reseed', function(req, res) {
-		seed.seedUsers();
+		seed.seedUsers(true);
 		res.json("Database reseeded");
 });
 

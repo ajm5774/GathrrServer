@@ -2,9 +2,20 @@
 var mongoose   = require('mongoose');
 var User = require('./app/models/user');
 
-exports.seedUsers = function seedUsers() {
+exports.seedUsers = function seedUsers(dropDocs) {
+	console.log("got to the seed method");
+
+	if(dropDocs === true)
+	{
+		User.remove({}, function(err){
+			if(err)
+				console.log(err);
+		});
+	}
+
     User.find({}).exec(function (err, collection) {
         if (collection.length === 0) {
+        	console.log("creating docs");
             var testImages = ["https://placekitten.com/g/200/300", 
             "http://nattyornot.com/wp-content/uploads/2014/11/mike-tyson-huge-muscles-bodybuilding.jpg"];
 			var genders = ["male", "male", "female"];
