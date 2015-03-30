@@ -58,6 +58,23 @@ router.route('/addUser')
 			res.json({ message: 'User created!' });
 		});
 	});
+	
+router.route('/addHistory')
+	.post(function(req, res) {
+
+		User.findOne({id: req.body.id}, function(err, user) {
+			
+			user.history[req.body.id] = req.body.result
+
+			user.save(function(err) {
+				if (err)
+					res.send(err);
+
+				res.json({ message: 'User fight-history updated!' });
+			});
+
+		});
+	});
 
 router.route('/user')
 
