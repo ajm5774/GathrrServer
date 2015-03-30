@@ -142,6 +142,11 @@ router.route('/resetSeen')
 		
 	});
 
+router.get('/reseed', function(req, res) {
+		seed.seedUsers();
+		res.json("Database reseeded");
+});
+
 router.get('/getNextFighter', function(req, res) {
 	User.findOne({id: req.query.id}, function(err, user) {
 		if(user == undefined)
