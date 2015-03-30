@@ -31,7 +31,7 @@ exports.seedUsers = function seedUsers(dropDocs) {
 				user.gender = genders[i%genders.length];
 				user.weight = (Math.random()*150.0 + 120);
 				user.picture = testImages[i%testImages.length];
-				user.history = [];
+				user.history = {};
 				user.fighters_seen = [];
 				user.weight_class = User.getWeightClass(user.weight);
 				user.save(function(err) {

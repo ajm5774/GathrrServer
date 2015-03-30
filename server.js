@@ -64,7 +64,7 @@ router.route('/addHistory')
 
 		User.findOne({id: req.body.id}, function(err, user) {
 			
-			user.history[req.body.id] = req.body.result
+			user.history[req.body.fought_id] = req.body.result
 
 			user.save(function(err) {
 				if (err)

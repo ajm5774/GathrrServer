@@ -12,7 +12,7 @@ var UserSchema   = new Schema({
 	sex: String,
 	picture: String,
 	weight_class: String,
-	history: {fought_id: String},
+	history: {},
 	fighters_seen: [String]
 });
 
