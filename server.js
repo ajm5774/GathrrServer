@@ -17,9 +17,9 @@ app.use(bodyParser.json());
 
 var mongoose   = require('mongoose');
 var seed     = require('./seed');
-mongoose.connect('mongodb://gathrr:gathrrPass!1@ds031631.mongolab.com:31631/gathrr',
+mongoose.connect('mongodb://gathrr:gathrrPass!1@ds041188.mongolab.com:41188/gathrr',
 function(){
-	seed.seedUsers();
+	seed.seedUsers(false);
 }); // connect to our database
 var User     = require('./app/models/user');
 
@@ -142,6 +142,11 @@ router.route('/resetSeen')
 		
 	});
 
+router.get('/reseed', function(req, res) {
+		seed.seedUsers(true);
+		res.json("Database reseeded");
+});
+
 router.get('/getNextFighter', function(req, res) {
 	User.findOne({id: req.query.id}, function(err, user) {
 		if(user == undefined)
@@ -150,14 +155,20 @@ router.get('/getNextFighter', function(req, res) {
 			return;
 		}
 
-		User.findOne({id:  {$ne: user.id, $nin: user.fighters_seen},
-		gender: user.gender, weight_class: user.weight_class}, function(err, nFighter) {
-			if (err)
-				res.send(err);  
-			res.json(nFighter);
-		});
+		User.findOne(
+			{id:  {$ne: user.id, $nin: user.fighters_seen},
+			gender: {$in: user.matched_genders}, 
+			matched_genders: user.gender , 
+			weight_class: user.weight_class},
+			function(err, nFighter) {
+				if (err)
+					res.send(err);  
+				res.json(nFighter);
+			}
+		);
 	});
 }); 
+
 
 router.get('/getNotSeenFighters', function(req, res) {
 	User.findOne({id: req.query.id}, function(err, user) {
@@ -167,12 +178,17 @@ router.get('/getNotSeenFighters', function(req, res) {
 			return;
 		}
 
-		User.find({id:  {$ne: user.id, $nin: user.fighters_seen},
-		gender: user.gender, weight_class: user.weight_class}, function(err, nFighters) {
-			if (err)
-				res.send(err);  
-			res.json(nFighters);
-		});
+		User.find(
+			{id:  {$ne: user.id, $nin: user.fighters_seen},
+			gender: {$in: user.matched_genders}, 
+			matched_genders: user.gender , 
+			weight_class: user.weight_class},
+			function(err, nFighter) {
+				if (err)
+					res.send(err);  
+				res.json(nFighter);
+			}
+		);
 	});
 }); 
 

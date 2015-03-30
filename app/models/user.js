@@ -6,6 +6,7 @@ var exports = module.exports = {};
 var UserSchema   = new Schema({
 	id: String,
 	name: String,
+	matched_genders: [String],
 	gender: String,
 	weight: Number,
 	sex: String,
