@@ -76,6 +76,14 @@ router.route('/addHistory')
 		});
 	});
 
+router.get('/history', function(req, res) {
+		User.findOne({id: req.body.id}, function(err, user) {
+			if (err)
+				res.send(err);
+			res.json(user.history);
+		});
+});	
+
 router.route('/user')
 
 	// get the user with that id

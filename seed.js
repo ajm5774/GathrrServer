@@ -21,6 +21,18 @@ exports.seedUsers = function seedUsers(dropDocs) {
 			var genders = ["male", "male", "female"];
 			var matchedGenders = [["male"], ["male", "female"], ["female"]];
 			var numUsers = 50;
+			var history = {
+				"User2" : {
+					Date: "3/30/2015",
+					ELOChange: "+4",
+					Outcome: "Win"
+				},
+				"User4" : {
+					Date: "3/31/2015",
+					ELOChange: "+2",
+					Outcome: "Loss"
+				},
+			};
 
 			for(var i = 0; i < numUsers; i++)
 			{
@@ -31,7 +43,7 @@ exports.seedUsers = function seedUsers(dropDocs) {
 				user.gender = genders[i%genders.length];
 				user.weight = (Math.random()*150.0 + 120);
 				user.picture = testImages[i%testImages.length];
-				user.history = {};
+				user.history = history;
 				user.fighters_seen = [];
 				user.weight_class = User.getWeightClass(user.weight);
 				user.save(function(err) {
