@@ -63,8 +63,15 @@ router.route('/addHistory')
 	.post(function(req, res) {
 
 		User.findOne({id: req.body.id}, function(err, user) {
+		
+			history_entry = {};
+			history_entry["Outcome"]=req.body.outcome;
+			history_entry["ELOChange"]=req.body.elo_change;
+			history_entry["Date"]=req.body.date;
 			
-			user.history[req.body.fought_id] = req.body.result
+			user.history[req.body.id_fought] = history_entry;
+			
+			console.log(user.history);
 
 			user.save(function(err) {
 				if (err)
