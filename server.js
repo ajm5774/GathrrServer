@@ -77,10 +77,12 @@ router.route('/addHistory')
 	});
 
 router.get('/history', function(req, res) {
-		User.findOne({id: req.body.id}, function(err, user) {
+		User.findOne({id: req.query.id}, function(err, user) {
 			if (err)
 				res.send(err);
-			res.json(user.history);
+			if(user == undefined || user == null)
+				res.json(null);
+			res.json(JSON.stringify(user.history));
 		});
 });	
 
