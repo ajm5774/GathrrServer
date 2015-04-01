@@ -71,9 +71,14 @@ router.route('/addHistory')
 			
 			user.history[req.body.id_fought] = history_entry;
 			
-			console.log(user.history);
+			if(history_entry["ELOChange"][0]=="+"){
+				user.elo += parseInt(req.body.elo_change.substring(1,req.body.elo_change.length));
+			}else{
+				user.elo -= parseInt(req.body.elo_change.substring(1,req.body.elo_change.length));
+			}
 			
 			user.markModified("history");
+			user.markModified("elo");
 
 			user.save(function(err) {
 				if (err)
