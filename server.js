@@ -72,12 +72,14 @@ router.route('/addHistory')
 			user.history[req.body.id_fought] = history_entry;
 			
 			console.log(user.history);
+			
+			user.markModified("history");
 
 			user.save(function(err) {
 				if (err)
 					res.send(err);
 
-				res.json({ message: 'User fight-history updated!' });
+				res.json({ message: 'History Updated!' });
 			});
 
 		});
