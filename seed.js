@@ -21,6 +21,7 @@ exports.seedUsers = function seedUsers(dropDocs) {
 			var genders = ["male", "male", "female"];
 			var matchedGenders = [["male"], ["male", "female"], ["female"]];
 			var numUsers = 50;
+			var ELO = 1200;
 			var history = {
 				"User2" : {
 					Date: "3/30/2015",
@@ -44,6 +45,7 @@ exports.seedUsers = function seedUsers(dropDocs) {
 				user.weight = (Math.random()*150.0 + 120);
 				user.picture = testImages[i%testImages.length];
 				user.history = history;
+				user.elo = ELO;
 				user.fighters_seen = [];
 				user.weight_class = User.getWeightClass(user.weight);
 				user.save(function(err) {

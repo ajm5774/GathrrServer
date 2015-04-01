@@ -13,6 +13,7 @@ var UserSchema   = new Schema({
 	picture: String,
 	weight_class: String,
 	history: Schema.Types.Mixed,
+	elo: Number,
 	fighters_seen: [String]
 });
 
