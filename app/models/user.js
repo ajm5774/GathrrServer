@@ -14,6 +14,8 @@ var UserSchema   = new Schema({
 	weight_class: String,
 	history: Schema.Types.Mixed,
 	elo: Number,
+	would_fight: [String],
+	notifications: [Schema.Types.Mixed],
 	fighters_seen: [String]
 });
 

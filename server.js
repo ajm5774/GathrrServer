@@ -50,6 +50,8 @@ router.route('/addUser')
 		user.weight_class = User.getWeightClass(user.weight);
 		user.elo = 1200;
 		user.history = [];  
+		user.would_fight = []
+		user.notifications = []
 		user.fighters_seen = [];  
 
 		user.save(function(err) {
@@ -59,6 +61,40 @@ router.route('/addUser')
 			res.json({ message: 'User created!' });
 		});
 	});
+	
+router.route('/addMatch')
+	.post(function(req, res) {
+		User.findOne({id: req.body.id}, function(err, user) {
+			User.findOne({id: req.body.matched}, function(err, matched) {
+				user.would_fight.push(req.body.matched)
+				if(matched.would_fight.indexOf(req.body.id) >= 0){
+					n_entry = {}
+					n_entry['date'] = Date();
+					n_entry['id'] = req.body.id;
+					n_entry['seen'] = false;
+					matched.notifications.push(n_entry);
+					
+					n_entry2 = {}
+					n_entry2['date'] = Date();
+					n_entry2['id'] = req.body.matched;
+					n_entry2['seen'] = false;
+					user.notifications.push(n_entry2);
+				}
+				matched.save(function(err) {
+					if (err)
+						res.send(err);
+				});
+				
+				user.save(function(err) {
+				if (err)
+					res.send(err);
+
+				res.json({ message: 'Match Added!' });
+				});
+				
+			});
+		});
+});	
 	
 router.route('/addHistory')
 	.post(function(req, res) {

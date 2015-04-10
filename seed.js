@@ -21,6 +21,8 @@ exports.seedUsers = function seedUsers(dropDocs) {
 			var genders = ["male", "male", "female"];
 			var matchedGenders = [["male"], ["male", "female"], ["female"]];
 			var numUsers = 50;
+			var would_fight = []
+			var notifications = []
 			var ELO = 1200;
 			var history = {
 				"User2" : {
@@ -46,6 +48,8 @@ exports.seedUsers = function seedUsers(dropDocs) {
 				user.picture = testImages[i%testImages.length];
 				user.history = history;
 				user.elo = ELO;
+				user.would_fight = would_fight;
+				user.notifications = notifications;
 				user.fighters_seen = [];
 				user.weight_class = User.getWeightClass(user.weight);
 				user.save(function(err) {
