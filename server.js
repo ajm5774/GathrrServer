@@ -65,6 +65,19 @@ router.route('/login')
 			}
 		});
 	});
+	
+router.route('/notifications')
+	.get(function(req,res){
+		if(sessions[req.query.session]){
+			User.findOne({id: req.query.id}, function(err, user) {
+				if(err)
+					res.send(err);
+				res.json(user.notifications);
+			});
+		}else{
+			res.send(403);
+		}
+	});
 
 router.route('/addUser')
 	.post(function(req, res) {
