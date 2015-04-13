@@ -14,6 +14,7 @@ app.use(morgan('dev')); // log requests to the console
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+var sessions = {};
 
 var mongoose   = require('mongoose');
 var seed     = require('./seed');
@@ -22,6 +23,17 @@ function(){
 	seed.seedUsers(false);
 }); // connect to our database
 var User     = require('./app/models/user');
+
+String.prototype.hashCode = function() {
+  var hash = 0, i, chr, len;
+  if (this.length == 0) return hash;
+  for (i = 0, len = this.length; i < len; i++) {
+    chr   = this.charCodeAt(i);
+    hash  = ((hash << 5) - hash) + chr;
+    hash |= 0; // Convert to 32bit integer
+  }
+  return hash;
+};
 
 
 // ROUTES FOR OUR API
@@ -38,11 +50,28 @@ router.use(function(req, res, next) {
 	next();
 });
 
+router.route('/login')
+	.post(function(req, res) {
+		User.findOne({id: req.body.id}, function(err, user) {
+			token = {};
+			if(user.password == req.body.password){
+				token['session'] = req.body.id.hashCode();
+				sessions[token['session']] = true;
+				if (err)
+					res.send(err);
+				res.json(token);
+			}else{
+				res.send(403);
+			}
+		});
+	});
+
 router.route('/addUser')
 	.post(function(req, res) {
 
 		var user = new User();
 		user.id = req.body.id;
+		user.password = req.body.password;
 		user.name = req.body.name;  
 		user.weight = req.body.weight;  
 		user.sex = req.body.sex;  
@@ -141,49 +170,62 @@ router.route('/user')
 
 	// get the user with that id
 	.get(function(req, res) {
-		User.findOne({id: req.query.id}, function(err, user) {
-			if (err)
-				res.send(err);
-			res.json(user);
-		});
+		if(sessions[req.query.session]==true){
+			User.findOne({id: req.query.id}, function(err, user) {
+				if (err)
+					res.send(err);
+				res.json(user);
+			});
+		}else{
+			res.send(403);
+		}
 	})
 
 	// update the User with this id
 	.put(function(req, res) {
-		User.findOne({id: req.query.id}, function(err, user) {
-
-			if (err)
-				res.send(err);
-
-			user.id = req.body.id;
-			user.name = req.body.name;  
-			user.weight = req.body.weight;  
-			user.sex = req.body.sex;  
-			user.picture = req.body.picture; 
-
-			user.save(function(err) {
+		if(session[req.body.session]){
+			User.findOne({id: req.query.id}, function(err, user) {
+	
 				if (err)
 					res.send(err);
-
-				res.json({ message: 'User updated!' });
+	
+				user.id = req.body.id;
+				user.name = req.body.name;  
+				user.weight = req.body.weight;  
+				user.sex = req.body.sex;  
+				user.picture = req.body.picture; 
+	
+				user.save(function(err) {
+					if (err)
+						res.send(err);
+	
+					res.json({ message: 'User updated!' });
+				});
+	
 			});
-
-		});
+		}else{
+			res.send(403);
+		}
 	})
 
 	// delete the user with this id
 	.delete(function(req, res) {
-		User.remove({id: req.query.id}, function(err, user) {
-			if (err)
-				res.send(err);
-
-			res.json({ message: 'Successfully deleted' });
-		});
+		if(sessions[req.query.session]==true){
+			User.remove({id: req.query.id}, function(err, user) {
+				if (err)
+					res.send(err);
+	
+				res.json({ message: 'Successfully deleted' });
+			});
+		}else{
+			res.send(403);
+		}
 	});
 
 router.route('/addSeen')
 
 	.post(function(req, res) {
+		if(sessions[req.query.session]==true){
 		console.log("****************");
 		console.log("body: " + req.body.id);
 		console.log("idseen: " + req.body.idSeen);
@@ -199,12 +241,16 @@ router.route('/addSeen')
 			});
 
 		});
+		}else{
+			res.send(403);
+		}
 		
 	});
 	
 router.route('/resetSeen')
 
 	.post(function(req, res) {
+		if(sessions[req.query.session]==true){
 		User.findOne({id: req.body.id}, function(err, user) {
 
 			user.fighters_seen = [];
@@ -217,7 +263,9 @@ router.route('/resetSeen')
 			});
 
 		});
-		
+		}else{
+			res.send(403);
+		}
 	});
 
 router.get('/reseed', function(req, res) {
@@ -226,6 +274,7 @@ router.get('/reseed', function(req, res) {
 });
 
 router.get('/getNextFighter', function(req, res) {
+	if(sessions[req.query.session]==true){
 	User.findOne({id: req.query.id}, function(err, user) {
 		if(user == undefined)
 		{
@@ -245,10 +294,14 @@ router.get('/getNextFighter', function(req, res) {
 			}
 		);
 	});
+	}else{
+		res.send(403);
+	}
 }); 
 
 
 router.get('/getNotSeenFighters', function(req, res) {
+	if(sessions[req.query.session]==true){
 	User.findOne({id: req.query.id}, function(err, user) {
 		if(user == undefined)
 		{
@@ -268,6 +321,9 @@ router.get('/getNotSeenFighters', function(req, res) {
 			}
 		);
 	});
+	}else{
+	res.send(403);
+	}
 }); 
 
 router.get('/getAllFighters', function(req, res) {

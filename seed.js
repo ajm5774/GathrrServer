@@ -41,6 +41,7 @@ exports.seedUsers = function seedUsers(dropDocs) {
 			{
 				var user = new User();
 				user.id = "user" + i;
+				user.password = "password";
 				user.name = "user" + i;
 				user.matched_genders = matchedGenders[i%genders.length];
 				user.gender = genders[i%genders.length];
